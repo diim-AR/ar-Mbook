@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      body { margin: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <a-scene mindar-image="imageTargetSrc: assets/marker/targets.mind;" 
+             color-space="sRGB" 
+             renderer="colorManagement: true, physicallyCorrectLights" 
+             vr-mode-ui="enabled: false" 
+             device-orientation-permission-ui="enabled: false">
+
+      <a-assets>
+        <!-- Video assets -->
+        <video id="video1" src="assets/video/video1.mp4" loop playsinline crossorigin="anonymous"></video>
+        <video id="video2" src="assets/video/video2.mp4" loop playsinline crossorigin="anonymous"></video>
+        <video id="video3" src="assets/video/video3.mp4" loop playsinline crossorigin="anonymous"></video>
+        <video id="video4" src="assets/video/video4.mp4" loop playsinline crossorigin="anonymous"></video>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <!-- Marker Entities -->
+      <a-entity mindar-image-target="targetIndex: 0" id="marker1">
+        <a-video src="#video1" width="1.0" height="1.34" position="0 -0.27 0"></a-video>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 1" id="marker2">
+        <a-video src="#video2" width="1.0" height="1.34" position="0 -0.27 0"></a-video>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 2" id="marker3">
+        <a-video src="#video3" width="1.0" height="1.34" position="0 -0.27 0"></a-video>
+      </a-entity>
+      <a-entity mindar-image-target="targetIndex: 3" id="marker4">
+        <a-video src="#video4" width="1.0" height="1.34" position="0 -0.27 0"></a-video>
+      </a-entity>
+
+    </a-scene>
+
+     <img src="assets/logo2.png" 
+     style="position: fixed; bottom: 10px; left: 10%; transform: translateX(-50%); width: 80px; opacity: 0.5; z-index: 999;" />
+
+    <script>
+      const videos = {
+        marker1: document.querySelector('#video1'),
+        marker2: document.querySelector('#video2'),
+        marker3: document.querySelector('#video3'),
+        marker4: document.querySelector('#video4')
+      };
+
+      Object.entries(videos).forEach(([markerId, videoEl]) => {
+        const marker = document.querySelector(`#${markerId}`);
+        marker.addEventListener('targetFound', () => {
+          videoEl.play();
+        });
+        marker.addEventListener('targetLost', () => {
+          videoEl.pause();
+        });
+      });
+    </script>
+  </body>
+</html>
